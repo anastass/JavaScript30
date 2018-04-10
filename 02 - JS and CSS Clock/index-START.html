@@ -92,41 +92,27 @@
     //   snd.play();
     // }
 
-    // function setDate() {
-    //   const now = new Date();
-    //   const offset = 90;
+    // TODO: Fix problem with the hand rotation at 12 o'clock
+    function setDate() {
+      const now = new Date();
+      const offset = 90;
 
-    //   var seconds = now.getSeconds();
-    //   const secondsDegrees = ((seconds / 60) * 360) + offset;
-    //   if (secondsDegrees != offset)
-    //     secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
-    //   else
-    //     beep();
+      var seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360) + offset;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
 
-    //   const minutes = now.getMinutes();
-    //   const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + offset;
-    //   if (minutesDegrees != offset)
-    //     minHand.style.transform = `rotate(${minutesDegrees}deg)`;
+      const minutes = now.getMinutes();
+      const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + offset;
+      minHand.style.transform = `rotate(${minutesDegrees}deg)`;
 
-    //   const hour = now.getHours();
-    //   const hourDegrees = ((hour / 12) * 360) + ((minutes / 60) * 30) + offset;
-    //   if (hourDegrees != offset)
-    //     hourHand.style.transform = `rotate(${hourDegrees}deg)`;
-    // }
+      const hour = now.getHours();
+      const hourDegrees = ((hour / 12) * 360) + ((minutes / 60) * 30) + offset;
+      hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+    }
 
-    // setInterval(setDate, 1000);
+    setInterval(setDate, 1000);
 
-    // setDate()
-
-    // function myFunction() {
-    //     const val = document.getElementById("angle").value;
-    //     const angle = val / 100 * 360 + 90;
-    //     secondHand.style.transform = `rotate(${angle}deg)`;
-    // }
-    // setInterval(myFunction, 1000);
-    const angle = 0;
-    secondHand.style.transform = `rotate(${angle}deg)`;
-    secondHand.style.transform = "rotate(90deg)";
+    setDate()
 
   </script>
 </body>
