@@ -113,6 +113,21 @@
     });
     console.log(alpha);
 
+    // another way for creating object
+    var Person = (function () {
+        function Person(firstName, lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+        Person.prototype.fullName = function () {
+            return this.firstName + " " + this.lastName;
+        };
+        return Person;
+    }());
+    var person = new Person("Daenerys", "Targaryen");
+    console.log(person.fullName());
+
+
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck'];
