@@ -66,6 +66,11 @@
       font-size: 15px;
     }
 
+    span.distance {
+      font-size: 15px;
+      color: red;
+    }
+
     .hl {
       background:#ffc600;
     }

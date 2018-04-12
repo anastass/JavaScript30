@@ -138,7 +138,7 @@
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
 
-    const result = fetch('./Category_Boulevards%20in%20Paris%20-%20Wikipedia.html')
+    const result = fetch('./data/Category_Boulevards%20in%20Paris%20-%20Wikipedia.html')
       .then(blob => blob.text())
       .then(data => {
         const parser = new DOMParser();
