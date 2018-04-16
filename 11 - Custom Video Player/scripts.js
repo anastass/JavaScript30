@@ -19,6 +19,7 @@ const progressBar = player.querySelector(".progress__filled");
 const toggle = player.querySelector(".toggle");
 const skipButtons = player.querySelectorAll("[data-skip]");
 const ranges = player.querySelectorAll("input[type='range']");
+const toggle_fullscreen = player.querySelector(".fullscreen");
 
 function togglePlay() {
   // if (video.paused) {
@@ -48,10 +49,8 @@ function skip() {
 }
 
 function handleRangeUpdate(e) {
-  if (e.type === "change" || (e.type === "mousemove" && range_drag)) {
-    // console.log(this.value);
-    video[this.name] = this.value;
-  }
+  // console.log(this.value);
+  video[this.name] = this.value;
 }
 
 function handleProgress() {
@@ -60,14 +59,11 @@ function handleProgress() {
 }
 
 function scrub(e) {
-  if (e.type === "click" || (e.type === "mousemove" && progress_drag)) {
-    const scrubTime = e.offsetX / progress.offsetWidth * video.duration;
-    video.currentTime = scrubTime;
-  }
+  const scrubTime = e.offsetX / progress.offsetWidth * video.duration;
+  video.currentTime = scrubTime;
 }
 
-let range_drag = false;
-let progress_drag = false;
+let mousedown = false;
 
 video.addEventListener("click", togglePlay);
 video.addEventListener("play", updateButton); // update play button when video is playing
@@ -85,23 +81,28 @@ document.body.onkeyup = function(e) {
 skipButtons.forEach(button => button.addEventListener("click", skip));
 
 ranges.forEach(range => range.addEventListener("change", handleRangeUpdate));
-ranges.forEach(range => range.addEventListener("mousemove", handleRangeUpdate));
+window.innerHeight;
 ranges.forEach(range =>
-  range.addEventListener("mousedown", () => {
-    range_drag = true;
-  })
+  range.addEventListener("mousemove", e => mousedown && handleRangeUpdate(e))
 );
 ranges.forEach(range =>
-  range.addEventListener("mouseup", () => {
-    range_drag = false;
-  })
+  range.addEventListener("mousedown", () => (mousedown = true))
+);
+ranges.forEach(range =>
+  range.addEventListener("mouseup", () => (mousedown = false))
 );
 
 progress.addEventListener("click", scrub);
-progress.addEventListener("mousemove", scrub);
-progress.addEventListener("mousedown", () => {
-  progress_drag = true;
-});
-progress.addEventListener("mouseup", () => {
-  progress_drag = false;
-});
+progress.addEventListener("mousemove", e => mousedown && scrub(e));
+progress.addEventListener("mousedown", () => (mousedown = true));
+progress.addEventListener("mouseup", () => (mousedown = false));
+
+function toggleFullScreen() {
+  if (!document.webkitIsFullScreen) {
+    player.webkitRequestFullScreen();
+  } else {
+    document.webkitExitFullscreen();
+  }
+}
+
+toggle_fullscreen.addEventListener("click", toggleFullScreen);
