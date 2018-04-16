@@ -1,59 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Hold Shift to Check Multiple Checkboxes</title>
 </head>
+
 <body>
   <style>
-
     html {
       font-family: sans-serif;
-      background:#ffc600;
+      background: #ffc600;
     }
 
     .inbox {
-      max-width:400px;
-      margin:50px auto;
-      background:white;
-      border-radius:5px;
-      box-shadow:10px 10px 0 rgba(0,0,0,0.1);
+      max-width: 400px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
     }
 
     .item {
-      display:flex;
-      align-items:center;
+      display: flex;
+      align-items: center;
       border-bottom: 1px solid #F1F1F1;
     }
 
     .item:last-child {
-      border-bottom:0;
+      border-bottom: 0;
     }
 
 
-    input:checked + p {
-      background:#F9F9F9;
+    input:checked+p {
+      background: #F9F9F9;
       text-decoration: line-through;
     }
 
     input[type="checkbox"] {
-      margin:20px;
+      margin: 20px;
     }
 
     p {
-      margin:0;
-      padding:20px;
-      transition:background 0.2s;
-      flex:1;
-      font-family:'helvetica neue';
+      margin: 0;
+      padding: 20px;
+      transition: background 0.2s;
+      flex: 1;
+      font-family: 'helvetica neue';
       font-size: 20px;
       font-weight: 200;
       border-left: 1px solid #D1E2FF;
     }
-
-
   </style>
-   <!--
+  <!--
    The following is a common layout you would see in an email client.
 
    When a user clicks a checkbox, holds Shift, and then clicks another checkbox a few rows down, all the checkboxes inbetween those two checkboxes should be checked.
@@ -98,7 +97,42 @@
     </div>
   </div>
 
-<script>
-</script>
+  <script>
+    const checkboxes = [...document.querySelectorAll('input[type=checkbox]')];
+    let i = 0;
+    checkboxes.forEach(checkbox => {
+      checkbox.addEventListener('click', processClick);
+      checkbox.dataset.index = i++;
+    });
+
+    // Check We solution which does not use data properties
+    const INVALID_INDEX = -1
+    let lastIndex = INVALID_INDEX;
+    let lastIndexShift = INVALID_INDEX;
+
+    function processClick(e) {
+      const currentIndex = parseInt(this.dataset.index);
+      if (lastIndex == INVALID_INDEX) lastIndex = currentIndex;
+
+      if (e.shiftKey && checkboxes[lastIndex].checked) {  // shift click is used
+        if (lastIndexShift !== INVALID_INDEX) {                      // remove previous selection two shift+click in a sequence are used
+          changeState(lastIndexShift, false);
+        }
+        changeState(currentIndex, true);                  // mark boxes as checked if range selected
+        lastIndexShift = currentIndex;
+      } else {
+        lastIndex = checkboxes[currentIndex].checked ? currentIndex : INVALID_INDEX;
+        lastIndexShift = INVALID_INDEX;
+      }
+    }
+
+    function changeState(from, status) {
+      const step = from > lastIndex ? -1 : 1;
+      for (let i = from; i !== lastIndex; i += step) {
+        checkboxes[i].checked = status;
+      }
+    }
+  </script>
 </body>
+
 </html>
