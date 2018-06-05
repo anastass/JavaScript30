@@ -71,31 +71,22 @@
     populateList(items, itemsList);
   }
 
-  function checkAllItems(e) {
+  function setCheckAllItems(e, value) {
     items.forEach(item => {
-      item.done = true;
+      item.done = value;
     });
     localStorage.setItem('items', JSON.stringify(items));
     populateList(items, itemsList);
   }
-
-  function unCheckAllItems(e) {
-    items.forEach(item => {
-      item.done = false;
-    });
-    localStorage.setItem('items', JSON.stringify(items));
-    populateList(items, itemsList);
-  }
-
 
   addItems.addEventListener('submit', addItem);
   itemsList.addEventListener('click', toggleDone);
 
   const checkAll = document.querySelector('#checkAll');
-  checkAll.addEventListener('click', checkAllItems);
+  checkAll.addEventListener('click', e => setCheckAllItems(e, true));
 
   const unCheckAll = document.querySelector('#unCheckAll');
-  unCheckAll.addEventListener('click', unCheckAllItems);
+  unCheckAll.addEventListener('click', e => setCheckAllItems(e, false));
 
 
   populateList(items, itemsList);
