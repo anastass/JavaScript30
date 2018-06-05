@@ -22,16 +22,85 @@
     <form class="add-items">
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
+      <input id="checkAll" type="button" value="Check all">
+      <input id="unCheckAll" type="button" value="Uncheck all">
     </form>
-  </div>
+</div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage['items']) || [];
 
+  function addItem(e) {
+    e.preventDefault();
+    const text = (this.querySelector("[name='item']")).value;
+    const item = {
+      text, // E6 syntax; equivalent to "text: text"
+      done: false
+    }
+    items.push(item);
+    populateList(items, itemsList);
+
+    // localStorage expects key:value pair where value is a type of string
+    localStorage.setItem('items', JSON.stringify(items)); // JSON.parse() to convert back to object
+
+    console.log(item);
+    this.reset();
+  }
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} />
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `
+    }).join('');
+
+  }
+
+  function toggleDone(e) {
+    const el = e.target;
+    if (!el.matches('input')) return;
+
+    const index = el.dataset.index
+    items[index].done = !items[index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function checkAllItems(e) {
+    items.forEach(item => {
+      item.done = true;
+    });
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function unCheckAllItems(e) {
+    items.forEach(item => {
+      item.done = false;
+    });
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+
+  addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
+
+  const checkAll = document.querySelector('#checkAll');
+  checkAll.addEventListener('click', checkAllItems);
+
+  const unCheckAll = document.querySelector('#unCheckAll');
+  unCheckAll.addEventListener('click', unCheckAllItems);
+
+
+  populateList(items, itemsList);
 </script>
-
+ 
 
 </body>
 </html>
